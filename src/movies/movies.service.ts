@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 export interface Movie {
   id: number;
   title: string;
+  genre: string;
 }
 
 @Injectable()
@@ -11,10 +12,12 @@ export class MoviesService {
     {
       id: 1,
       title: '해리포터',
+      genre: 'fantasy',
     },
     {
       id: 2,
       title: '반지의 제왕',
+      genre: 'action',
     },
   ];
 
@@ -34,10 +37,11 @@ export class MoviesService {
     return movie;
   }
 
-  createMovie(title: string) {
+  createMovie(title: string, genre: string) {
     const movie: Movie = {
       id: this.nextId++,
       title,
+      genre,
     };
 
     this.movies.push(movie);
@@ -45,12 +49,12 @@ export class MoviesService {
     return movie;
   }
 
-  updateMovie(id: number, title: string) {
+  updateMovie(id: number, title?: string, genre?: string) {
     const movie = this.movies.find((m) => m.id === id);
 
     if (!movie) return new NotFoundException();
 
-    Object.assign(movie, { title });
+    Object.assign(movie, { title, genre });
 
     return movie;
   }

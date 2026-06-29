@@ -1,6 +1,7 @@
 import {
   Body,
-  Controller, Delete,
+  Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -27,12 +28,19 @@ export class MoviesController {
 
   @Post()
   postMovie(@Body() createMovieDto: CreateMovieDto) {
-    return this.moviesService.createMovie(createMovieDto.title);
+    return this.moviesService.createMovie(
+      createMovieDto.title,
+      createMovieDto.genre,
+    );
   }
 
   @Patch(':id')
   patchMovie(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
-    return this.moviesService.updateMovie(+id, updateMovieDto.title ?? '');
+    return this.moviesService.updateMovie(
+      +id,
+      updateMovieDto.title,
+      updateMovieDto.genre,
+    );
   }
 
   @Delete(':id')

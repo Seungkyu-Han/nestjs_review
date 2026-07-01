@@ -18,8 +18,8 @@ export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Get()
-  getMovies(@Query('title') title?: string): Movie[] {
-    return this.moviesService.getManyMovies(title);
+  async getMovies(@Query('title') title?: string): Promise<Movie[]> {
+    return await this.moviesService.getManyMovies(title);
   }
 
   @Get(':id')

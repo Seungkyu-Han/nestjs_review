@@ -1,66 +1,56 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Movie } from './entities/movie.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class MoviesService {
-  private movies: Movie[] = [
-    {
-      id: 1,
-      title: '해리포터',
-      genre: 'fantasy',
-    },
-    {
-      id: 2,
-      title: '반지의 제왕',
-      genre: 'action',
-    },
-  ];
+  constructor(
+    @InjectRepository(Movie)
+    private readonly movieRepository: Repository<Movie>,
+  ) {}
 
-  private nextId = 3;
-
-  getManyMovies(title?: string) {
-    if (!title) return this.movies;
-
-    return this.movies.filter((m) => m.title.includes(title));
+  async getManyMovies(title?: string) {
+    console.log(title);
+    return await this.movieRepository.find();
   }
 
-  getMovieById(id: number) {
-    const movie = this.movies.find((m) => m.id === id);
+  async getMovieById(id: number) {
+    const movie = await this.movieRepository.findOne({ where: { id } });
 
     if (!movie) return new NotFoundException();
 
     return movie;
   }
 
-  createMovie(title: string, genre: string) {
-    const movie: Movie = {
-      id: this.nextId++,
-      title,
-      genre,
-    };
+  async createMovie(title: string, genre: string) {
+    const movie = this.movieRepository.create({ title, genre });
 
-    this.movies.push(movie);
+    await this.movieRepository.save(movie);
 
     return movie;
   }
 
-  updateMovie(id: number, title?: string, genre?: string) {
-    const movie = this.movies.find((m) => m.id === id);
+  async updateMovie(id: number, title?: string, genre?: string) {
+    const movie = await this.movieRepository.findOne({ where: { id } });
 
     if (!movie) return new NotFoundException();
 
-    Object.assign(movie, { title, genre });
+    if (title) movie.title = title;
+    if (genre) movie.genre = genre;
+
+    await this.movieRepository.save(movie);
 
     return movie;
   }
 
-  deleteMovie(id: number) {
-    const movieIndex = this.movies.findIndex((m) => m.id === id);
+  async deleteMovie(id: number) {
+    const movie = await this.movieRepository.findOne({ where: { id } });
 
-    if (movieIndex === -1) return new NotFoundException();
+    if (!movie) return new NotFoundException();
 
-    this.movies.splice(movieIndex, 1);
+    await this.movieRepository.remove(movie);
 
-    return;
+    return movie;
   }
 }

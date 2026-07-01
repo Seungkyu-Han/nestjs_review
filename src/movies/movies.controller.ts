@@ -32,6 +32,7 @@ export class MoviesController {
     return this.moviesService.createMovie(
       createMovieDto.title,
       createMovieDto.genre,
+      createMovieDto.detail,
     );
   }
 
@@ -41,6 +42,7 @@ export class MoviesController {
       +id,
       updateMovieDto.title,
       updateMovieDto.genre,
+      updateMovieDto.detail,
     );
   }
 

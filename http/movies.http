@@ -11,5 +11,17 @@ POST http://localhost:3000/movies
 Content-Type: application/json
 
 {
-  "title": "승규"
+  "title": "승규123",
+  "genre": "romance123",
+  "detail": "디테일123"
+}
+
+###
+PATCH http://localhost:3000/movies/6
+Content-Type: application/json
+
+{
+  "title": "승규1",
+  "genre": "romance1",
+  "detail": "디테일1"
 }

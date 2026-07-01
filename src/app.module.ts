@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DirectorsModule } from './directors/directors.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -12,7 +13,7 @@ import * as Joi from 'joi';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
-        ENV: Joi.string().valid('postgres').required(),
+        ENV: Joi.string().valid('dev').required(),
         DB_TYPE: Joi.string().required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.number().required(),
@@ -33,8 +34,10 @@ import * as Joi from 'joi';
         database: configService.get<string>('DB_NAME'),
         entities: [],
         synchronize: true,
+        autoLoadEntities: true,
       }),
     }),
+    DirectorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,13 +1,9 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  VersionColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from './base.entity';
+import { MovieDetail } from './movie-detail.entity';
 
 @Entity()
-export class Movie {
+export class Movie extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -17,9 +13,8 @@ export class Movie {
   @Column()
   genre: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @VersionColumn()
-  version: number;
+  @OneToOne(() => MovieDetail, (movieDetail) => movieDetail.movie, {
+    cascade: true,
+  })
+  movieDetail: MovieDetail;
 }

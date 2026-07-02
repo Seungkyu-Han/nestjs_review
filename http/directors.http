@@ -1,0 +1,24 @@
+GET http://localhost:3000/directors
+
+###
+GET http://localhost:3000/directors?id=1
+
+###
+POST http://localhost:3000/directors
+Content-Type: application/json
+
+{
+  "name": "승규",
+  "dob": "1999-12-04",
+  "nationality": "korea"
+}
+
+###
+PATCH http://localhost:3000/directors/1
+Content-Type: application/json
+
+{
+  "name": "승규1",
+  "dob": "1999-12-04",
+  "nationality": "korea1"
+}

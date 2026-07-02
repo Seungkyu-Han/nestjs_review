@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -8,6 +9,7 @@ import {
 import { BaseEntity } from '../../common/entities/base.entity';
 import { MovieDetail } from './movie-detail.entity';
 import { Director } from '../../directors/entities/director.entity';
+import { Genre } from '../../genres/entities/genre.entity';
 
 @Entity()
 export class Movie extends BaseEntity {
@@ -25,6 +27,9 @@ export class Movie extends BaseEntity {
   })
   movieDetail: MovieDetail;
 
-  @ManyToOne(() => Director, (director) => director.movies)
+  @ManyToOne(() => Director, (director) => director.movies, { nullable: false })
   director: Director;
+
+  @ManyToMany(() => Genre, (genre) => genre.movies)
+  genres: Genre[];
 }

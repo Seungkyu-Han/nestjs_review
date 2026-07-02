@@ -5,6 +5,7 @@ import { MoviesModule } from './movies/movies.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DirectorsModule } from './directors/directors.module';
+import { GenresModule } from './genres/genres.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -38,6 +39,7 @@ import * as Joi from 'joi';
       }),
     }),
     DirectorsModule,
+    GenresModule,
   ],
   controllers: [AppController],
   providers: [AppService],

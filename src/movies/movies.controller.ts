@@ -33,6 +33,8 @@ export class MoviesController {
       createMovieDto.title,
       createMovieDto.genre,
       createMovieDto.detail,
+      createMovieDto.directorId,
+      createMovieDto.genreIds,
     );
   }
 
@@ -43,6 +45,7 @@ export class MoviesController {
       updateMovieDto.title,
       updateMovieDto.genre,
       updateMovieDto.detail,
+      updateMovieDto.directorId,
     );
   }
 

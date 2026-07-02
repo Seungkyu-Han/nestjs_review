@@ -43,7 +43,7 @@ export class MoviesController {
     return this.moviesService.updateMovie(
       +id,
       updateMovieDto.title,
-      updateMovieDto.genre,
+      updateMovieDto.genreIds,
       updateMovieDto.detail,
       updateMovieDto.directorId,
     );

@@ -76,7 +76,7 @@ export class MoviesService {
   async updateMovie(
     id: number,
     title?: string,
-    genre?: string,
+    genreIds?: number[],
     detail?: string,
     directorId?: number,
   ) {
@@ -100,9 +100,12 @@ export class MoviesService {
     }
 
     if (!movie) return new NotFoundException();
-
+    if (genreIds) {
+      movie.genres = await this.genreRepository.find({
+        where: { id: In(genreIds) },
+      });
+    }
     if (title) movie.title = title;
-    if (genre) movie.genre = genre;
     if (detail) movie.movieDetail.detail = detail;
     if (newDirector) movie.director = newDirector;
 

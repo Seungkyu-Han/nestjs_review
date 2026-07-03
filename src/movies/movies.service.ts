@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Movie } from './entities/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Like, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Director } from '../directors/entities/director.entity';
 import { Genre } from '../genres/entities/genre.entity';
 
@@ -17,26 +17,27 @@ export class MoviesService {
   ) {}
 
   async getManyMovies(title?: string) {
-    if (!title)
-      return await this.movieRepository.find({
-        relations: ['movieDetail', 'director'],
-      });
+    const queryBuilder = this.movieRepository
+      .createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.director', 'director')
+      .leftJoinAndSelect('movie.genres', 'genres');
 
-    return await this.movieRepository.find({
-      where: {
-        title: Like(`%${title}%`),
-      },
-      relations: ['movieDetail'],
-    });
+    if (title) {
+      queryBuilder.where('movie.title LIKE :title', { title: `%${title}%` });
+    }
+
+    return await queryBuilder.getMany();
   }
 
   async getMovieById(id: number) {
-    const movie = await this.movieRepository.findOne({
-      where: { id },
-      relations: ['movieDetail', 'director'],
-    });
+    const movie = await this.movieRepository
+      .createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.director', 'director')
+      .leftJoinAndSelect('movie.genres', 'genres')
+      .where('movie.id = :id', { id })
+      .getOne();
 
-    if (!movie) return new NotFoundException();
+    if (!movie) throw new NotFoundException();
 
     return movie;
   }

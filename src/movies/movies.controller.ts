@@ -4,9 +4,12 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
@@ -14,6 +17,7 @@ import { MoviesService } from './movies.service';
 import { Movie } from './entities/movie.entity';
 
 @Controller('movies')
+@UsePipes(ValidationPipe)
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
@@ -23,7 +27,7 @@ export class MoviesController {
   }
 
   @Get(':id')
-  getMovie(@Param('id') id: string) {
+  getMovie(@Param('id', ParseIntPipe) id: number) {
     return this.moviesService.getMovieById(+id);
   }
 
